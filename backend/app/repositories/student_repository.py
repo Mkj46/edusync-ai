@@ -1,3 +1,4 @@
+from app.schemas.student_schema import StudentCreate
 students = [
     {
         "id": 1,
@@ -22,3 +23,19 @@ def get_student(student_id: int):
             return student
 
     return None
+def create_student(student: StudentCreate):
+    new_student = {
+        "id": len(students) + 1,
+        "name": student.name,
+        "email": student.email
+    }
+
+    students.append(new_student)
+
+    return new_student
+def get_student_by_email(email: str):
+    for student in students:
+        if student["email"] == email:
+            return student
+
+    return None 
