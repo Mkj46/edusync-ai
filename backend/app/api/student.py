@@ -1,13 +1,18 @@
 from fastapi import APIRouter
 from app.services import student_service
 from app.schemas.student_schema import Student, StudentCreate
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.db.database import get_db
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[Student])
-def get_students():
-    return student_service.get_students()
+def get_students(
+    db: Session = Depends(get_db)
+):
+    return student_service.get_students(db)
 
 
 @router.get("/{student_id}", response_model=Student)

@@ -1,10 +1,11 @@
 from fastapi import HTTPException
 from app.repositories import student_repository
 from app.schemas.student_schema import StudentCreate
+from sqlalchemy.orm import Session
 
 
-def get_students():
-    return student_repository.get_students()
+def get_students(db: Session):
+    return student_repository.get_students(db)
 
 
 def get_student(student_id: int):

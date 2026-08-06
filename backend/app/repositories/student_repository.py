@@ -1,4 +1,6 @@
 from app.schemas.student_schema import StudentCreate
+from sqlalchemy.orm import Session
+from app.models.student import Student
 students = [
     {
         "id": 1,
@@ -13,8 +15,8 @@ students = [
 ]
 
 
-def get_students():
-    return students
+def get_students(db: Session):
+    return db.query(Student).all()
 
 
 def get_student(student_id: int):
