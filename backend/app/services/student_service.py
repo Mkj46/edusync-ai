@@ -20,13 +20,12 @@ def get_student(student_id: int):
     return student
 
 
-def create_student(student: StudentCreate):
-    existing_student = student_repository.get_student_by_email(student.email)
-
+def create_student(db: Session, student: StudentCreate):
+    existing_student = student_repository.get_student_by_email(db,student.email)
     if existing_student:
         raise HTTPException(
             status_code=400,
             detail="Email already exists"
         )
 
-    return student_repository.create_student(student)
+    return student_repository.create_student(db, student)

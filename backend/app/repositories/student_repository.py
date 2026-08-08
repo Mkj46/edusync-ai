@@ -25,19 +25,17 @@ def get_student(student_id: int):
             return student
 
     return None
-def create_student(student: StudentCreate):
-    new_student = {
-        "id": len(students) + 1,
-        "name": student.name,
-        "email": student.email
-    }
+def create_student(db: Session, student_data: StudentCreate):
+    student = Student(
+        name=student_data.name,
+        email=student_data.email
+    )
 
-    students.append(new_student)
+    db.add(student)
+    db.commit()
+    db.refresh(student)
 
-    return new_student
-def get_student_by_email(email: str):
-    for student in students:
-        if student["email"] == email:
-            return student
+    return student
 
-    return None 
+def get_student_by_email(db: Session, email: str):
+    return db.query(Student).filter(Student.email == email).first()
