@@ -15,8 +15,11 @@ def get_students(
 
 
 @router.get("/{student_id}", response_model=Student)
-def get_student(student_id: int):
-    return student_service.get_student(student_id)
+def get_student(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    return student_service.get_student(db, student_id)
 
 
 @router.post("/", response_model=Student, status_code=201)

@@ -8,8 +8,8 @@ def get_students(db: Session):
     return student_repository.get_students(db)
 
 
-def get_student(student_id: int):
-    student = student_repository.get_student(student_id)
+def get_student(db: Session, student_id: int):
+    student = student_repository.get_student(db, student_id)
 
     if student is None:
         raise HTTPException(
@@ -17,7 +17,7 @@ def get_student(student_id: int):
             detail="Student not found"
         )
 
-    return student
+    return student  
 
 
 def create_student(db: Session, student: StudentCreate):
