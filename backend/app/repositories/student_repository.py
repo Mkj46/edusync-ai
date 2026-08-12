@@ -1,4 +1,4 @@
-from app.schemas.student_schema import StudentCreate
+from app.schemas.student_schema import StudentCreate, StudentUpdate
 from sqlalchemy.orm import Session
 from app.models.student import Student
 
@@ -18,6 +18,43 @@ def create_student(db: Session, student_data: StudentCreate):
     db.add(student)
     db.commit()
     db.refresh(student)
+
+    return student
+
+def update_student(
+    db: Session,
+    student_id: int,
+    student_data: StudentUpdate
+):
+    student = (
+        db.query(Student)
+        .filter(Student.id == student_id)
+        .first()
+    )
+
+    if student is None:
+        return None
+
+    student.name = student_data.name
+    student.email = student_data.email
+
+    db.commit()
+    db.refresh(student)
+
+    return student
+
+def delete_student(db: Session, student_id: int):
+    student = (
+        db.query(Student)
+        .filter(Student.id == student_id)
+        .first()
+    )
+
+    if student is None:
+        return None
+
+    db.delete(student)
+    db.commit()
 
     return student
 

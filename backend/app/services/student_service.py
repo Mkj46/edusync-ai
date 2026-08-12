@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from app.repositories import student_repository
-from app.schemas.student_schema import StudentCreate
+from app.schemas.student_schema import StudentCreate, StudentUpdate
 from sqlalchemy.orm import Session
 
 
@@ -29,3 +29,33 @@ def create_student(db: Session, student: StudentCreate):
         )
 
     return student_repository.create_student(db, student)
+
+def update_student(
+    db: Session,
+    student_id: int,
+    student_data: StudentUpdate
+):
+    student = student_repository.update_student(
+        db,
+        student_id,
+        student_data
+    )
+
+    if student is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+    return student
+
+def delete_student(db: Session, student_id: int):
+    student = student_repository.delete_student(db, student_id)
+
+    if student is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+    return student
