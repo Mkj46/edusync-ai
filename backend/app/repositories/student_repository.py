@@ -15,11 +15,16 @@ def create_student(db: Session, student_data: StudentCreate):
         email=student_data.email
     )
 
-    db.add(student)
-    db.commit()
-    db.refresh(student)
+    try:
+        db.add(student)
+        db.commit()
+        db.refresh(student)
 
-    return student
+        return student
+
+    except Exception:
+        db.rollback()
+        raise
 
 def update_student(
     db: Session,
@@ -38,10 +43,15 @@ def update_student(
     student.name = student_data.name
     student.email = student_data.email
 
-    db.commit()
-    db.refresh(student)
+    try:
+        db.commit()
+        db.refresh(student)
 
-    return student
+        return student
+
+    except Exception:
+        db.rollback()
+        raise
 
 def delete_student(db: Session, student_id: int):
     student = (
@@ -53,10 +63,15 @@ def delete_student(db: Session, student_id: int):
     if student is None:
         return None
 
-    db.delete(student)
-    db.commit()
+    try:
+        db.delete(student)
+        db.commit()
 
-    return student
+        return student
+
+    except Exception:
+        db.rollback()
+        raise
 
 def get_student_by_email(db: Session, email: str):
     return db.query(Student).filter(Student.email == email).first()
