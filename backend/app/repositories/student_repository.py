@@ -1,6 +1,7 @@
 from app.schemas.student_schema import StudentCreate, StudentUpdate
 from sqlalchemy.orm import Session
 from app.models.student import Student
+from sqlalchemy.exc import IntegrityError
 
 def get_students(db: Session):
     return db.query(Student).all()
@@ -22,7 +23,7 @@ def create_student(db: Session, student_data: StudentCreate):
 
         return student
 
-    except Exception:
+    except IntegrityError:
         db.rollback()
         raise
 
@@ -49,7 +50,7 @@ def update_student(
 
         return student
 
-    except Exception:
+    except IntegrityError:
         db.rollback()
         raise
 
