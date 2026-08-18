@@ -53,8 +53,12 @@ def test_student():
 
     yield student
 
-    db.delete(student)
-    db.commit()
     db.close()
+
+@pytest.fixture(autouse=True)
+def clean_database():
+    yield
+    Base.metadata.drop_all(bind=test_engine)
+    Base.metadata.create_all(bind=test_engine)
 
 app.dependency_overrides[get_db] = override_get_db
